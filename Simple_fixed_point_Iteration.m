@@ -1,38 +1,39 @@
-clear
+
 clc
+clear
+format long
 
-% Define the function and symbolic variable
-syms x;
+% Define the function
+% f = @(x) 2𝑥3−11.7𝑥2+17.7𝑥−5;
 
-% Function (Change the function here)
-f = 0.95*x^3-5.9*x^2+10.9*x-6 ;
+% Define the iteration function for simple fixed-point iteration
+g = @(x) (-2*x^3 + 11.7*x^2  +5)/17.7; 
 
+% Initial guess for the root
+x0 = 3;
 
-% Define the initial guess and other parameters
-xi = 3.5;
-tol = 0.001;
+% Tolerance level
+tol = 0.0000005;
+
+% Maximum number of iterations
 maxIterations = 1000;
 
 % Calculate True Value
-true_value = double(subs(f, xi));
-
+% true_value = 1.97238099813058;
+true_value = 3.563160824862061;
 % Initialize iteration counter and previous approximation
 n = 0;
-prev_approximation = 0;
+prev_approximation = x0;
 
 % Initialize table
 table_data = cell(0, 5);
 
 % Loop until the error is less than the tolerance or maximum iterations are reached
-while true
+while n < maxIterations
     n = n + 1;
     
-    % Compute the value of f(x) and its derivative at xi
-    f_val = double(subs(f, x, xi));
-    df_val = double(subs(diff(f, x), x, xi));
-    
-    % Compute the next approximation using Newton-Raphson method
-    approximation = xi - f_val / df_val;
+    % Compute the next approximation using simple fixed-point iteration
+    approximation = g(prev_approximation);
 
     % Calculate True Error
     Et = ((true_value - approximation) / true_value) * 100;
@@ -50,8 +51,8 @@ while true
     table_data{n, 3} = Et;
     table_data{n, 4} = Ea;
     
-    % Check termination conditions
-    if abs((approximation - prev_approximation) / approximation) < tol || n >= maxIterations
+    % Check convergence criteria
+    if abs(approximation - prev_approximation) < tol
         table_data{n, 5} = 'Converged';
         break;
     else
@@ -60,9 +61,6 @@ while true
     
     % Store the previous approximation
     prev_approximation = approximation;
-    
-    % Update xi for the next iteration
-    xi = approximation;
 end
 
 % Convert table data to a table

@@ -2,15 +2,15 @@ clear
 clc
 
 % Define the function
-f = @(x) log(x^4)-0.7;
+f = @(x) -12*x^5 - 6.4*x^3 + 12;
 
 % Define the interval [a, b]
-a = 0.5;
-b = 2;
+a = 0;
+b = 1;
 
 % Set the tolerance level
 tol = 0.05;
-% true_value = fzero(f, [a, b]);
+true_value = 0.904486720794046;
 
 % Initialize variables
 maxIterations = 1000;
@@ -56,20 +56,27 @@ while error > tol && iter < maxIterations
 end
 
 % Calculate true errors and approximate errors
-% for n = 1:iter
-%     Et(n) = ((true_value -  approximations(n)) / true_value) * 100;
-% end
+for n = 1:iter
+    Et(n) = ((true_value -  approximations(n)) / true_value) * 100;
+end
 
 for n = 2:iter
     Ea(n) = (abs(approximations(n) - approximations(n-1)) / approximations(n)) * 100;
 end
 
+% Calculate true errors and approximate errors
+for n = 1:iter
+    Et(n) = ((true_value -  approximations(n)) / true_value) * 100;
+end
+
+
+
 % Create a table
-results_table = table((1:iter)', approximations(1:iter)', Ea(1:iter)', ...
-    'VariableNames', {'Iteration', 'Approximation', 'Approx_Error'});
+results_table = table((1:iter)', approximations(1:iter)', Et(1:iter)', Ea(1:iter)', ...
+    'VariableNames', {'Iteration', 'Approximation', 'True_Error', 'Approx_Error'});
 
 % Display the table
 disp(results_table);
 
 % Display the result
-% fprintf('Root found at x = %.8f after %d iterations.\n', c, iter);
+fprintf('Root found at x = %.8f after %d iterations.\n', c, iter);

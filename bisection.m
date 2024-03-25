@@ -3,7 +3,7 @@ clc
 format long
 
 % Define the function
-f = @(x)  -13 -20*x + 19*x^2-3*x^3;
+f = @(x) -13 -20*x +19*x^2 -3*x^3;
 
 % Define the interval [a, b]
 a = -1;
@@ -11,7 +11,7 @@ b = 0;
 
 % Set the tolerance level
 tol = 0.01;
-true_value = double(subs(f,b));
+true_value = 0.904486720794046;
 
 % Initialize variables
 maxIterations = 1000;
@@ -46,7 +46,7 @@ end
 
 % Calculate true errors and approximate errors
 for n = 1:iter
-    Et(n) = ((true_value -  double(subs(f,approximations(n)))) / true_value) * 100;
+    Et(n) = ((true_value -  approximations(n)) / true_value) * 100;
 end
 
 

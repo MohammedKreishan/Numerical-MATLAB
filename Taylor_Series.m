@@ -21,7 +21,7 @@ Et = [];
 Ea = [];
 
 % Set tolerance level
-tol = 0.000000002;
+tol = 0.0000002;
 
 % Initialize previous approximation
 prev_approximation = 0;
@@ -100,7 +100,7 @@ while true
 
     
     % Check termination conditions
-    if abs((approximation - prev_approximation) / approximation) < tol || n >= 10
+    if abs((approximation - prev_approximation) / approximation) < tol || n >= 7
         break;
     end
     

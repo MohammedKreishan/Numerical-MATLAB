@@ -1,38 +1,38 @@
-clear
 clc
+clear
+% Define the function
+f = @(x) -12*x^5 - 6*x^3 + 10;
 
-% Define the function and symbolic variable
-syms x;
+% Initial guesses for the root
+x0 = 0;
+x1 = 01;
 
-% Function (Change the function here)
-f = 0.95*x^3-5.9*x^2+10.9*x-6 ;
+% Tolerance level
+tol = 0.005;
 
-
-% Define the initial guess and other parameters
-xi = 3.5;
-tol = 0.001;
+% Maximum number of iterations
 maxIterations = 1000;
 
 % Calculate True Value
-true_value = double(subs(f, xi));
+true_value = f(x0);
 
-% Initialize iteration counter and previous approximation
+% Initialize iteration counter and previous approximations
 n = 0;
-prev_approximation = 0;
+prev_approximation = x0;
 
 % Initialize table
 table_data = cell(0, 5);
 
 % Loop until the error is less than the tolerance or maximum iterations are reached
-while true
+while n < maxIterations
     n = n + 1;
     
-    % Compute the value of f(x) and its derivative at xi
-    f_val = double(subs(f, x, xi));
-    df_val = double(subs(diff(f, x), x, xi));
+    % Compute the values of f(x) at x0 and x1
+    f_x0 = f(x0);
+    f_x1 = f(x1);
     
-    % Compute the next approximation using Newton-Raphson method
-    approximation = xi - f_val / df_val;
+    % Compute the next approximation using the secant method
+    approximation = x1 - f_x1 * (x0-x1) / (f_x0 - f_x1);
 
     % Calculate True Error
     Et = ((true_value - approximation) / true_value) * 100;
@@ -50,8 +50,8 @@ while true
     table_data{n, 3} = Et;
     table_data{n, 4} = Ea;
     
-    % Check termination conditions
-    if abs((approximation - prev_approximation) / approximation) < tol || n >= maxIterations
+    % Check convergence criteria
+    if abs((approximation - prev_approximation) / approximation) < tol
         table_data{n, 5} = 'Converged';
         break;
     else
@@ -61,8 +61,9 @@ while true
     % Store the previous approximation
     prev_approximation = approximation;
     
-    % Update xi for the next iteration
-    xi = approximation;
+    % Update x0 and x1 for the next iteration
+    x0 = x1;
+    x1 = approximation;
 end
 
 % Convert table data to a table
